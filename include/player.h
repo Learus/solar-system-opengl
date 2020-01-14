@@ -6,9 +6,6 @@
 
 #include "camera.h"
 
-
-
-
 class Player
 {
     public:

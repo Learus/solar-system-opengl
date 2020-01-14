@@ -6,9 +6,7 @@ MAIN=main
 OBJECTS=$(BIN)/$(MAIN).o $(BIN)/glad.o
 LIBS=-lglfw -lX11 -lXxf86vm -lXrandr -lpthread -lassimp -lXi -ldl -lXinerama -lXcursor
 
-all: compile
-	@make run
-	
+all: clean compile run
 
 compile: dirs $(OBJECTS)
 	@g++ $(OBJECTS) -I$(INCLUDE) -o $(BIN)/$(MAIN) -std=c++11 -Wall $(LIBS)

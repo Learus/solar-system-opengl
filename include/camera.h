@@ -17,10 +17,16 @@ enum Camera_Movement
     DOWN
 };
 
+enum Camera_Style
+{
+    FLY,
+    ROTATE
+};
+
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
-const float SPEED = 2.5f;
+const float SPEED = 10.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
 
@@ -44,9 +50,11 @@ class Camera
         float MouseSensitivity;
         float zoom;
 
+        Camera_Style Style;
+
         // Constructor with vectors
-        Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f) , glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM)
+        Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f) , glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, Camera_Style style = ROTATE)
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM), Style(style)
         {
             Position = position;
             WorldUp = up;
@@ -54,8 +62,8 @@ class Camera
         }
 
         // Constructor with scalar values
-        Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw, float pitch)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM)
+        Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw = YAW, float pitch = PITCH, Camera_Style style = ROTATE)
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM), Style(style)
         {
             Position = glm::vec3(posX, posY, posZ);
             WorldUp = glm::vec3(upX, upY, upZ);
@@ -65,7 +73,10 @@ class Camera
         // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
         glm::mat4 GetViewMatrix()
         {
-            return glm::lookAt(Position, Position + Front, Up);
+            if (Style == FLY)
+                return glm::lookAt(Position, (Position + Front), Up);
+
+            return glm::lookAt(Position, glm::vec3(0.0, 0.0, 0.0), WorldUp);
         }
 
         // Moves the camera towards the direction given. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -111,6 +122,41 @@ class Camera
             }
 
             // Update Front, Right and Up Vectors using the updated Euler angles
+            updateCameraVectors();
+        }
+
+        // Orbits around lookat as center. x, y axis
+        void Orbit(Camera_Movement direction, float deltaTime)
+        {
+            float velocity = MovementSpeed * deltaTime;
+
+            if (direction == LEFT)
+            {
+                Position -= Right * velocity;
+                Yaw += velocity * 2;
+            }
+
+            if (direction == RIGHT)
+            {
+                Position += Right * velocity;
+                Yaw += -velocity * 2;
+            }
+                
+            if (direction == UP)
+            {
+                if (Pitch + 2 * -velocity < -89.0f) return;
+
+                Position += Up * velocity;
+                Pitch += 2 * -velocity;
+            }
+                
+            if (direction == DOWN)
+            {
+                if (Pitch + 2 * velocity > 89.0f) return;
+
+                Position -= Up * velocity;
+                Pitch += 2 * velocity;
+            }
             updateCameraVectors();
         }
 
