@@ -3,6 +3,16 @@
 A simple solar system (Sun, Earth, Moon) created with OpenGL.  
 This is built on a linux machine, and makefile is written to work in am ubuntu environment.
 
+## Installation
+
+Following instructions from [eclass](https://eclass.uoa.gr/modules/document/file.php/D35/OpenGL/%CE%95%CF%81%CE%B3%CE%B1%CF%83%CF%84%CE%AE%CF%81%CE%B9%CE%B1%202019/opengl33_ubuntu1804_installation.txt) (you will need an active UoA account to access the intstructions), run:
+
+```sh
+sudo apt-get install cmake libx11-dev xorg-dev libglu1-mesa-dev freeglut3-dev libglew1.5 libglew1.5-dev libglu1-mesa libglu1-mesa-dev libgl1-mesa-glx libgl1-mesa-dev libglfw3-dev libglfw3 libassimp-dev assimp-utils
+```
+
+to install required GL libraries + assimp library.
+
 ## Usage
 
 ```sh
@@ -21,10 +31,16 @@ make
 
 ## Comments
 
-## Libraries Used
+* I used code from [learnopengl.com](learnopengl.com) as a headstart.
+* model.h, mesh.h, shader.h are basically copied from that tutorial.
+* camera.h is a modified and extended version of the camera class shown in the tutorial.
+* circle.h is a class that I created to draw line circles in a 3d environment.
+* skybox.h is a class that I created to display skyboxes given the right textures.
 
-* GLFW3
-* glad
-* assimp
+## Extra Libraries Used
+
+* glad (+ KHR)
 * stbi
 * glm
+
+Above libraries are located in the /lib directory.
