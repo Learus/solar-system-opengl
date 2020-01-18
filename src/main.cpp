@@ -26,8 +26,8 @@ float frameToggled = 0.0f;
 float timeSinceLastToggle = 1.0f;
 
 // Some settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 600;
+const unsigned int SCR_WIDTH = 1080;
+const unsigned int SCR_HEIGHT = 720;
 
 float earthOrbitRadius = 100.0f;
 float moonOrbitRadius = 20.0f;
@@ -37,9 +37,7 @@ glm::vec3 earthPos = sunPos + glm::vec3(sin(frameToggled) * earthOrbitRadius, 0.
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 30.0f));
 float cameraOrbitRadius = 30.0f;
-float frameMoved = 0.0f;
-bool moving = false;
-glm::vec3 cameraPos = sunPos + glm::vec3(sin(frameMoved) * cameraOrbitRadius, 0.0f, cos(frameMoved) * cameraOrbitRadius);
+float rotateAngle = 1.0f;
 
 // Mouse Input
 float lastX = SCR_WIDTH / 2.0f;
@@ -75,7 +73,6 @@ int main()
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
-    glfwSetCursorPosCallback(window, mouseInput);
     glfwSetScrollCallback(window, scrollInput);
 
     // Load glad
@@ -112,9 +109,6 @@ int main()
         if (animation)
             frameToggled += deltaTime;
 
-        if (moving)
-            frameMoved += deltaTime;
-            
 
         keyboardInput(window, deltaTime);
 
@@ -213,43 +207,25 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 // Handles user keyboard input. Supposed to be used every frame, so deltaTime can be calculated appropriately.
 void keyboardInput(GLFWwindow * window, float deltaTime)
 {
-    moving = false;
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 
-
     // Upwards Rotation
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-    {
-        moving = true;
-        // camera.Position += glm::vec3(0.0f, sin(frameMoved) * cameraOrbitRadius, cos(frameMoved) * cameraOrbitRadius);
-        camera.Orbit(UP, deltaTime);
-    }
+        camera.Orbit(UP, cameraOrbitRadius, rotateAngle);
 
     // Downwards Rotation
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-    {
-        moving = true;
-        // camera.Position = sunPos + glm::vec3(0.0f, cos(frameMoved) * cameraOrbitRadius, sin(frameMoved) * cameraOrbitRadius);
-        camera.Orbit(DOWN ,deltaTime);
-    }
+        camera.Orbit(DOWN, cameraOrbitRadius, rotateAngle);
 
     // Rightwards Rotation
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-    {
-        moving = true;
-        // camera.Position = sunPos + glm::vec3(sin(frameMoved) * cameraOrbitRadius, 0.0f , cos(frameMoved) * cameraOrbitRadius);
-        camera.Orbit(RIGHT ,deltaTime);
-    }
+        camera.Orbit(RIGHT, cameraOrbitRadius, rotateAngle);
 
     // Leftwards Rotation
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-    {
-        moving = true;
-        // camera.Position = sunPos + glm::vec3(cos(frameMoved) * cameraOrbitRadius, 0.0f, sin(frameMoved) * cameraOrbitRadius);
-        camera.Orbit(LEFT ,deltaTime);
-    }
+        camera.Orbit(LEFT, cameraOrbitRadius, rotateAngle);
 
 
     // Pause / Start
@@ -262,25 +238,6 @@ void keyboardInput(GLFWwindow * window, float deltaTime)
         }
     }
         
-}
-
-// Handles mouse buttons. Supposed to be used as the glfw mouse callback.
-void mouseInput(GLFWwindow * window, double xpos, double ypos)
-{
-    if (firstMouse)
-    {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
-
-    lastX = xpos;
-    lastY = ypos;
-
-    // camera.Rotate(xoffset, yoffset);
 }
 
 // Handles mouse scroll wheel. Supposed to be used as the glfw scroll callback.

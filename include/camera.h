@@ -17,18 +17,15 @@ enum Camera_Movement
     DOWN
 };
 
-enum Camera_Style
-{
-    FLY,
-    ROTATE
-};
-
 // Default camera values
 const float YAW = -90.0f;
 const float PITCH = 0.0f;
 const float SPEED = 10.0f;
 const float SENSITIVITY = 0.1f;
 const float ZOOM = 45.0f;
+const glm::vec3 POSITION = glm::vec3(0.0f, 0.0f, 0.0f);
+const glm::vec3 WORLDUP = glm::vec3(0.0f, 1.0f, 0.0f);
+const glm::vec3 FRONT = glm::vec3(0.0f, 0.0f, -1.0f);
 
 // An abstract camera class that processes input and calculates the corresponding Euler Angles, Vectors and Matrices for use in OpenGL
 class Camera
@@ -50,11 +47,9 @@ class Camera
         float MouseSensitivity;
         float zoom;
 
-        Camera_Style Style;
-
         // Constructor with vectors
-        Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f) , glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH, Camera_Style style = ROTATE)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM), Style(style)
+        Camera(glm::vec3 position = POSITION , glm::vec3 up = WORLDUP, float yaw = YAW, float pitch = PITCH)
+        : Front(FRONT), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM)
         {
             Position = position;
             WorldUp = up;
@@ -62,8 +57,8 @@ class Camera
         }
 
         // Constructor with scalar values
-        Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw = YAW, float pitch = PITCH, Camera_Style style = ROTATE)
-        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM), Style(style)
+        Camera(float posX, float posY, float posZ, float upX, float upY, float upZ, float yaw = YAW, float pitch = PITCH)
+        : Front(glm::vec3(0.0f, 0.0f, -1.0f)), Yaw(yaw), Pitch(pitch), MovementSpeed(SPEED), MouseSensitivity(SENSITIVITY), zoom(ZOOM)
         {
             Position = glm::vec3(posX, posY, posZ);
             WorldUp = glm::vec3(upX, upY, upZ);
@@ -73,10 +68,7 @@ class Camera
         // Returns the view matrix calculated using Euler Angles and the LookAt Matrix
         glm::mat4 GetViewMatrix()
         {
-            if (Style == FLY)
-                return glm::lookAt(Position, (Position + Front), Up);
-
-            return glm::lookAt(Position, glm::vec3(0.0, 0.0, 0.0), WorldUp);
+            return glm::lookAt(Position, (Position + Front), Up);
         }
 
         // Moves the camera towards the direction given. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
@@ -101,10 +93,11 @@ class Camera
 
             if (direction == DOWN)
                 Position -= Up * velocity;
+
         }
 
         // Processes input received from a mouse input system. Expects the offset value in both the x and y direction
-        void Rotate(float xoffset, float yoffset, GLboolean constrainPitch = true)
+        void RotateMouse(float xoffset, float yoffset, GLboolean constrainPitch = true)
         {
             xoffset *= MouseSensitivity;
             yoffset *= MouseSensitivity;
@@ -125,39 +118,54 @@ class Camera
             updateCameraVectors();
         }
 
-        // Orbits around lookat as center. x, y axis
-        void Orbit(Camera_Movement direction, float deltaTime)
+        // Rotates camera towards specific direction by angle. **Angle is NOT in radians**.
+        void RotateRad(Camera_Movement direction, float angle, GLboolean constrainPitch = true)
         {
-            float velocity = MovementSpeed * deltaTime;
-
-            if (direction == LEFT)
+            switch(direction)
             {
-                Position -= Right * velocity;
-                Yaw += velocity * 2;
+                case UP:
+                    Pitch -= angle;
+                    break;
+
+                case DOWN:
+                    Pitch += angle;
+                    break;
+
+                case LEFT:
+                    Yaw += angle;
+                    break;
+
+                case RIGHT:
+                    Yaw -= angle;
+                    break;
+
+                default: break;
             }
 
-            if (direction == RIGHT)
+            if (constrainPitch)
             {
-                Position += Right * velocity;
-                Yaw += -velocity * 2;
+                if (Pitch > 89.0f)
+                    Pitch = 89.0f;
+                if (Pitch < -89.0f)
+                    Pitch = -89.0f;
             }
-                
-            if (direction == UP)
-            {
-                if (Pitch + 2 * -velocity < -89.0f) return;
 
-                Position += Up * velocity;
-                Pitch += 2 * -velocity;
-            }
-                
-            if (direction == DOWN)
-            {
-                if (Pitch + 2 * velocity > 89.0f) return;
-
-                Position -= Up * velocity;
-                Pitch += 2 * velocity;
-            }
             updateCameraVectors();
+        }
+
+        // Orbits around lookat as center. x, y axis
+        // Idea:
+        // 1. Move to center
+        // 2. Rotate how you like (with angles (set value each time))
+        // 3. Update Front, Right
+        // 4. Move -Front * radius
+        void Orbit(Camera_Movement direction, float radius, float angle)
+        {
+            Position += Front * radius;
+
+            RotateRad(direction, angle);
+            
+            Position -= Front * radius;
         }
 
         // Processes input received from a mouse scroll-wheel event. Only requires input on the vertical wheel-axis
