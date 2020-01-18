@@ -1,10 +1,10 @@
-#include <glad/glad.h>
+#include "../lib/glad/glad.h"
 #include <string>
 #include "shader.h"
 
 #ifndef STB_IMAGE_IMPLEMENTATION
     #define STB_IMAGE_IMPLEMENTATION
-    #include "stb_image.h"
+    #include "../lib/stbi/stb_image.h"
 #endif
 
 

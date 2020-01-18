@@ -1,8 +1,8 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include <glad/glad.h>
-#include <glm/glm.hpp>
+#include "../lib/glad/glad.h"
+#include "../lib/glm/glm.hpp"
 
 #include "shader.h"
 

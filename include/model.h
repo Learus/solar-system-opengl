@@ -1,10 +1,10 @@
 #ifndef MODEL_H
 #define MODEL_H
 
-#include <glad/glad.h>
+#include "../lib/glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
+#include "../lib/glm/glm.hpp"
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -12,7 +12,7 @@
 
 #ifndef STB_IMAGE_IMPLEMENTATION
     #define STB_IMAGE_IMPLEMENTATION
-    #include "stb_image.h"
+    #include "../lib/stbi/stb_image.h"
 #endif
 
 

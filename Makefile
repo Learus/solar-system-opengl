@@ -1,6 +1,7 @@
 BIN=./bin
 SRC=./src
 INCLUDE=./include/
+LIB=./lib/
 
 MAIN=main
 OBJECTS=$(BIN)/$(MAIN).o $(BIN)/glad.o
@@ -9,7 +10,7 @@ LIBS=-lglfw -lX11 -lXxf86vm -lXrandr -lpthread -lassimp -lXi -ldl -lXinerama -lX
 all: clean compile run
 
 compile: dirs $(OBJECTS)
-	@g++ $(OBJECTS) -I$(INCLUDE) -o $(BIN)/$(MAIN) -std=c++11 -Wall $(LIBS)
+	@g++ -I$(LIB) -I$(INCLUDE) $(OBJECTS)  -o $(BIN)/$(MAIN) -std=c++11 -Wall $(LIBS)
 
 
 $(BIN)/$(MAIN).o: $(SRC)/$(MAIN).cpp

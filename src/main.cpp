@@ -1,9 +1,9 @@
-#include <glad/glad.h>
+#include "../lib/glad/glad.h"
 #include <GLFW/glfw3.h>
 
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include "../lib/glm/glm.hpp"
+#include "../lib/glm/gtc/matrix_transform.hpp"
+#include "../lib/glm/gtc/type_ptr.hpp"
 
 #include "../include/shader.h"
 #include "../include/camera.h"

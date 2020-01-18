@@ -1,6 +1,7 @@
 # Solar System OpenGL
 
-A simple solar system (Sun, Earth, Moon) created with OpenGL
+A simple solar system (Sun, Earth, Moon) created with OpenGL.  
+This is built on a linux machine, and makefile is written to work in am ubuntu environment.
 
 ## Usage
 
@@ -17,3 +18,13 @@ make
 * Enter : Toggles orbiting animation
 * Escape : Closes the window
 * Scroll : Zooms in and out
+
+## Comments
+
+## Libraries Used
+
+* GLFW3
+* glad
+* assimp
+* stbi
+* glm
