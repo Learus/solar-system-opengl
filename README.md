@@ -1,7 +1,7 @@
 # Solar System OpenGL
 
 A simple solar system (Sun, Earth, Moon) created with OpenGL.  
-This is built on a linux machine, and makefile is written to work in am ubuntu environment.
+This is built on a linux machine, and makefile is written to work in an ubuntu environment.
 
 ## Installation
 
@@ -16,7 +16,16 @@ to install required GL libraries + assimp library.
 ## Usage
 
 ```sh
+# To compile and run
 make
+
+# To Run
+./bin/make
+# or
+make run
+
+# To compile
+make compile
 ```
 
 ## Controls
@@ -36,6 +45,8 @@ make
 * camera.h is a modified and extended version of the camera class shown in the tutorial.
 * circle.h is a class that I created to draw line circles in a 3d environment.
 * skybox.h is a class that I created to display skyboxes given the right textures.
+* ./bin/main is the main executable file
+* I did not find the need to explain any more of the implementation. For any questions refer to the code.
 
 ## Extra Libraries Used
 

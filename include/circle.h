@@ -65,6 +65,7 @@ namespace Learus_Circle
                 glBindVertexArray(VAO);
                 glBindBuffer(GL_ARRAY_BUFFER, VBO);
 
+                // Create vertices of a 2d circle line
                 for (float angle = 0.0f; angle <= 2.0f * M_PI; angle += 2.0f * M_PI / _num_vertices)
                 {
                     Vertex v;
@@ -113,7 +114,7 @@ namespace Learus_Circle
                 model = glm::scale(model, newScale);
             }
 
-            void setUniforms(glm::mat4 _projection, glm::mat4 _view, glm::mat4 _model = glm::mat4(1.0f))
+            void setUniforms(glm::mat4 _projection = glm::mat4(1.0f), glm::mat4 _view = glm::mat4(1.0f), glm::mat4 _model = glm::mat4(1.0f))
             {
                 projection = _projection;
                 view = _view;

@@ -69,9 +69,6 @@ int main()
 
     glfwMakeContextCurrent(window);
 
-
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
     glfwSetFramebufferSizeCallback(window, framebufferSizeCallback);
     glfwSetScrollCallback(window, scrollInput);
 
@@ -88,7 +85,6 @@ int main()
     Shader sunShader("./src/sun.vs", "./src/sun.fs");
 
     // Load the models
-
     Model Sun("./models/Planet/planet.obj");
     Model Earth("./models/Earth/Globe.obj");
     Model Moon("./models/Rock/rock.obj");
@@ -165,7 +161,7 @@ int main()
         planetShader.setMat4("model", model);
         Earth.Draw(planetShader);
 
-        // Draw a circle showing the orbit around the sun
+        // Draw a circle showing the earth's orbit around the sun
         EarthOrbitCircle.setUniforms(projection, view);
         EarthOrbitCircle.scale(glm::vec3(0.1f, 0.1f, 0.1f));
         EarthOrbitCircle.rotate(glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -182,7 +178,7 @@ int main()
         planetShader.setMat4("model", model);
         Moon.Draw(planetShader);
 
-        // Draw a circle showing the orbit around the earth
+        // Draw a circle showing the moon's orbit around the earth
         MoonOrbitCircle.setUniforms(projection, view);
         MoonOrbitCircle.scale(glm::vec3(0.1f, 0.1f, 0.1f));
         MoonOrbitCircle.translate(earthPos);
@@ -207,7 +203,7 @@ void framebufferSizeCallback(GLFWwindow* window, int width, int height)
 // Handles user keyboard input. Supposed to be used every frame, so deltaTime can be calculated appropriately.
 void keyboardInput(GLFWwindow * window, float deltaTime)
 {
-
+    // Exit
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 

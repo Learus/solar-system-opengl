@@ -38,7 +38,7 @@ namespace Learus_Skybox
             Skybox(std::string top, std::string bottom, std::string left, std::string right, std::string front, std::string back)
             : shader(Learus_Skybox::vertex_shader, Learus_Skybox::fragment_shader, true)
             {
-                // Create Vertices, VBO, VAO
+                // Create Vertices of the cube, VBO, VAO
                 float vertices[] = {
                     // positions          
                     -1.0f,  1.0f, -1.0f,
