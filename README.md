@@ -1,7 +1,7 @@
 # Solar System OpenGL
 
 A simple solar system (Sun, Earth, Moon) created with OpenGL.  
-This is built on a linux machine, and makefile is written to work in an ubuntu environment.
+This is built on a linux machine, and makefile is written to work in a Linux Ubuntu environment. (Ubuntu probably does not matter).
 
 ## Installation
 
