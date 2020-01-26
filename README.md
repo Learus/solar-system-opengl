@@ -3,6 +3,10 @@
 A simple solar system (Sun, Earth, Moon) created with OpenGL.  
 This is built on a linux machine, and makefile is written to work in a Linux Ubuntu environment. (Ubuntu probably does not matter).
 
+## Contributor
+
+Ιωάννης Μαλιάρας - 1115201500084
+
 ## Installation
 
 Following instructions from [eclass](https://eclass.uoa.gr/modules/document/file.php/D35/OpenGL/%CE%95%CF%81%CE%B3%CE%B1%CF%83%CF%84%CE%AE%CF%81%CE%B9%CE%B1%202019/opengl33_ubuntu1804_installation.txt) (you will need an active UoA account to access the intstructions), run:
